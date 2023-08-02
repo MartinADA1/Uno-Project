@@ -1,9 +1,14 @@
 import random
 import time
+import os
 from card import Card
 from hand import Hand
 from deck import Deck
 from termcolor import colored
+
+#Function to clear screen
+def clear_screen():
+    os.system('cls' if os.name == 'nt' else 'clear')
 
 #Funciton to randomly select who starts first (Player Vs. AI)
 def choose_first_playerVAI():
