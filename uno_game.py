@@ -10,6 +10,13 @@ def choose_first_playerVAI():
         return 'Player'
     else:
         return 'Pc'
+    
+#Funciton to randomly select who starts first (Player Vs. Player)
+def choose_first_playerVplayer():
+    if random.randint(0,1)==0:
+        return 'Player 1'
+    else:
+        return 'Player 2'
 
 #Function to check if the card thrown by Player/AI is a valid card by comparing it with the top card
 def single_card_check(top_card,card):
@@ -34,6 +41,8 @@ def win_check(hand):
         return True
     else:
         return False
+    
+def playerVplayer():
     
 def playerVAI():
     while True:
