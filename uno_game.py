@@ -50,6 +50,8 @@ def win_check(hand):
     
 def player_action(player_name, player_hand, opponent_hand, top_card, deck):
 
+    clear_screen()
+
     win = False
     skip_turn = False
 
@@ -199,6 +201,7 @@ def ai_choice(ai_name, ai_hand, opponent_hand, top_card, deck):
 
 def playerVplayer():
     while True:
+        clear_screen()
         print('\nWelcome to UNO! Finish your cards first to win!')
         time.sleep(1)
         p1_name = input("\nPlayer 1, please enter your name: ")
@@ -259,6 +262,7 @@ def playerVplayer():
     
 def playerVAI():
     while True:
+        clear_screen()
         print('\nWelcome to UNO! Finish your cards first to win!')
         time.sleep(1)
         player_name = input("\nPlease enter your name: ")
