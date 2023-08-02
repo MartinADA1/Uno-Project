@@ -25,7 +25,7 @@ The task that I decided to choose for this assignment was to try my hand at recr
 # Proposed Solutions
 
 1. Made use of classes that included the set up of the game (such as creating the deck).
-2.  Made sure that the game followed a modular approach so that many elements of the game are stored in different files.
+2. Made sure that the game followed a modular approach so that many elements of the game are stored in different files.
 3. Made sure to follow object orientated programming when tackling this problem, ensuring that I  made use of simplicity and abstraction in the main code - making the code much easier to come back to refactor as the readability was greatly increased making it much easier to understand.
 
 ## UML style diagram illustrating initial overall solution
