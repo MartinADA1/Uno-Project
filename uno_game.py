@@ -47,7 +47,8 @@ def win_check(hand):
         return True
     else:
         return False
-    
+
+#Function that handles player logic   
 def player_action(player_name, player_hand, opponent_hand, top_card, deck):
 
     clear_screen()
@@ -135,13 +136,14 @@ def player_action(player_name, player_hand, opponent_hand, top_card, deck):
         win = True
 
     return top_card, win, skip_turn
-    
+
+#Function that handles AI logic
 def ai_choice(ai_name, ai_hand, opponent_hand, top_card, deck):
 
     win = False
     skip_turn = False
 
-    time.sleep(1)
+    time.sleep(0.5)
 
     print('\nThe Computer is thinking...')
 
@@ -199,6 +201,7 @@ def ai_choice(ai_name, ai_hand, opponent_hand, top_card, deck):
 
     return top_card, win, skip_turn
 
+#Function that handles player vs player gameplay
 def playerVplayer():
     while True:
         clear_screen()
@@ -209,6 +212,7 @@ def playerVplayer():
         deck = Deck()
         deck.shuffle()
 
+        #Dealing hands
         player1_hand = Hand()
         for i in range(7):
             player1_hand.add_card(deck.deal())
@@ -235,9 +239,9 @@ def playerVplayer():
 
         while playing:
             if turn == 'Player 1':
-                top_card, win, skip_turn = player_action(p1_name, player1_hand, player2_hand, top_card, deck)
+                top_card, win, skip_turn = player_action(p1_name, player1_hand, player2_hand, top_card, deck) 
                 if win:
-                    print('\n' + p1_name + ' WON!!')
+                    print('\n' + p1_name + ' has won!')
                     playing = False
                     break
                 if skip_turn:
@@ -247,7 +251,7 @@ def playerVplayer():
             elif turn == 'Player 2':
                 top_card, win, skip_turn = player_action(p2_name, player2_hand, player1_hand, top_card, deck)
                 if win:
-                    print('\n' + p2_name + ' WON!!')
+                    print('\n' + p2_name + ' has won!')
                     playing = False
                     break
                 if skip_turn:
@@ -259,7 +263,8 @@ def playerVplayer():
         if new_game != 'y':
             print('\nThanks for playing!')
             break
-    
+
+#Function that handles player vs AI gameplay   
 def playerVAI():
     while True:
         clear_screen()
@@ -270,6 +275,7 @@ def playerVAI():
         deck = Deck()
         deck.shuffle()
 
+        # Deals player and AI hands
         player_hand = Hand()
         for i in range(7):
             player_hand.add_card(deck.deal())
