@@ -1,9 +1,14 @@
 import random
 import time
+import os
 from card import Card
 from hand import Hand
 from deck import Deck
 from termcolor import colored
+
+#Function to clear screen
+def clear_screen():
+    os.system('cls' if os.name == 'nt' else 'clear')
 
 #Funciton to randomly select who starts first (Player Vs. AI)
 def choose_first_playerVAI():
@@ -44,6 +49,8 @@ def win_check(hand):
         return False
     
 def player_action(player_name, player_hand, opponent_hand, top_card, deck):
+
+    clear_screen()
 
     win = False
     skip_turn = False
@@ -194,6 +201,7 @@ def ai_choice(ai_name, ai_hand, opponent_hand, top_card, deck):
 
 def playerVplayer():
     while True:
+        clear_screen()
         print('\nWelcome to UNO! Finish your cards first to win!')
         time.sleep(1)
         p1_name = input("\nPlayer 1, please enter your name: ")
@@ -254,6 +262,7 @@ def playerVplayer():
     
 def playerVAI():
     while True:
+        clear_screen()
         print('\nWelcome to UNO! Finish your cards first to win!')
         time.sleep(1)
         player_name = input("\nPlease enter your name: ")
