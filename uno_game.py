@@ -458,7 +458,7 @@ while True:
         playerVAI()
     
     elif option == 2:
-        # playerVplayer()
+        playerVplayer()
 
     elif option == 3:
         break
