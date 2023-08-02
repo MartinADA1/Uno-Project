@@ -235,7 +235,7 @@ while True:
     option = int(input("Please select an option: "))
 
     if option == 1:
-        # playerVAI()
+        playerVAI()
     
     elif option == 2:
         # playerVplayer()
