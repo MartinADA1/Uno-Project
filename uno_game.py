@@ -43,19 +43,101 @@ def win_check(hand):
     else:
         return False
     
+def player_action(player_name, player_hand, opponent_hand, top_card, deck):
+
+    win = False
+    skip_turn = False
+
+    print(colored("\nIt's " + player_name + "'s turn\n", attrs=['bold']))
+    time.sleep(1)
+
+    print('The top card is: ' + str(top_card))
+    print('Your cards: ')
+
+    player_hand.cards_in_hand()
+    player_choice = input("\nWould you like to Play or Draw? (p/d): ")
+
+    # If player chooses to play a card
+    if player_choice == 'p':
+        pos = int(input('Enter number of the card you want to play: '))
+        temp_card = player_hand.single_card(pos)
+
+        # Checking if the chosen card is valid to play
+        if single_card_check(top_card, temp_card):
+            # If it's a number type card it'll be played without any extra effects
+            if temp_card.cardtype == 'number':
+                top_card = player_hand.remove_card(pos)
+                print("\n" + player_name + f" has played {temp_card}")
+                time.sleep(1)
+            else:
+                # If chosen card is a skip or reverse, the next player's turn is skipped
+                if temp_card.rank == 'Skip' or temp_card.rank == 'Reverse':
+                    skip_turn = True
+                    top_card = player_hand.remove_card(pos)
+                    print("\n" + player_name + f" has played {temp_card}")
+                    time.sleep(1)
+                # If chosen card is a draw 2, the next player's turn is skipped and they draw 2 cards
+                elif temp_card.rank == 'Draw2':
+                    skip_turn = True
+                    for i in range(2):
+                        draw_card = deck.deal()
+                        opponent_hand.add_card(draw_card)
+                    top_card = player_hand.remove_card(pos)
+                    print("\n" + player_name + f" has played {temp_card}")
+                    time.sleep(1)
+                # If chosen card is a draw 4, the next player's turn is skipped and they draw 4 cards
+                # The player also gets to choose the color in play after playing a draw 4
+                elif temp_card.rank == 'Draw4':
+                    skip_turn = True
+                    for i in range(4):
+                        draw_card = deck.deal()
+                        opponent_hand.add_card(draw_card)
+                    top_card = player_hand.remove_card(pos)
+                    draw4color = input('Enter which color you want to change to: ')
+                    if draw4color != draw4color.upper():
+                        draw4color = draw4color.upper()
+                    top_card.color = draw4color
+                    print("The color has been changed to " + f"{draw4color}")
+                    time.sleep(1)
+                # If chosen card is a wild card, the player can choose the color in play
+                elif temp_card.rank == 'Wild':
+                    top_card = player_hand.remove_card(pos)
+                    wildcolor = input('Enter which color you want to change to: ')
+                    if wildcolor != wildcolor.upper():
+                        wildcolor = wildcolor.upper()
+                    top_card.color = wildcolor
+                    print("The color has been changed to " + f"{wildcolor}")
+                    time.sleep(1)
+        else:
+            print('This card cannot be used')
+
+    # If player chooses to draw
+    elif player_choice == 'd':
+        temp_card = deck.deal()
+        print('You got: ' + str(temp_card))
+        time.sleep(1)
+        # If card is valid, player will get a chance to play it
+        if single_card_check(top_card, temp_card):
+            player_hand.add_card(temp_card)
+        # If not, player will have the card added to their hand and their turn ends
+        else:
+            print('Cannot use this card')
+            player_hand.add_card(temp_card)
+
+    if win_check(player_hand):
+        win = True
+
+    return top_card, win, skip_turn
+    
 def playerVplayer():
     while True:
-
         print('\nWelcome to UNO! Finish your cards first to win!')
         time.sleep(1)
-        
         p1_name = input("\nPlayer 1, please enter your name: ")
         p2_name = input("Player 2, please enter your name: ")
-
         deck = Deck()
         deck.shuffle()
 
-        # Dealing the initial 7 cards
         player1_hand = Hand()
         for i in range(7):
             player1_hand.add_card(deck.deal())
@@ -64,7 +146,6 @@ def playerVplayer():
         for i in range(7):
             player2_hand.add_card(deck.deal())
 
-        # Setting the card at top of deck for players to play ontop of
         top_card = deck.deal()
         if top_card.cardtype != 'number':
             while top_card.cardtype != 'number':
@@ -74,187 +155,37 @@ def playerVplayer():
         playing = True
 
         turn = choose_first_playerVplayer()
-
         if turn == 'Player 1':
             print('\n' + p1_name + ' will go first')
         else:
-            print('\n' + p2_name + ' will go first') 
+            print('\n' + p2_name + ' will go first')
         
+        time.sleep(2)
+
         while playing:
-            
-            # Player 1 Logic
             if turn == 'Player 1':
-                print(colored("\nIt's " + p1_name + "'s turn\n", attrs=['bold']))
-                time.sleep(1)
-
-                print('The top card is: ' + str(top_card))
-                print('Your cards: ')
-
-                player1_hand.cards_in_hand()
-                player1_choice = input("\nWould you like to Play or Draw? (p/d): ")
-
-                # If player 1 chooses to play a card
-                if player1_choice == 'p':
-                    pos = int(input('Enter number of the card you want to play: '))
-                    temp_card = player1_hand.single_card(pos)
-
-                    # Checking if the chosen card is valid to play
-                    if single_card_check(top_card, temp_card) == True:
-                        # If it's a number type card it'll be played without any extra effects
-                        if temp_card.cardtype == 'number':
-                            top_card = player1_hand.remove_card(pos)
-                            print("\n" + p1_name + f" has played {temp_card}")
-                            time.sleep(1)
-                            turn = 'Player 2'
-                        else:
-                            # If chosen card is a skip or reverse, the other players turn is skipped
-                            if temp_card.rank == 'Skip' or temp_card.rank == 'Reverse':
-                                turn = 'Player 1'
-                                top_card = player1_hand.remove_card(pos)
-                                print("\n" + p1_name + f" has played {temp_card}")
-                                time.sleep(1)
-                            # If chosen card is a draw 2, other players turn is skipped and they draw 2 cards
-                            elif temp_card.rank == 'Draw2':
-                                for i in range(2):
-                                    player2_hand.add_card(deck.deal())
-                                top_card = player1_hand.remove_card(pos)
-                                print("\n" + p1_name + f" has played {temp_card}")
-                                time.sleep(1)
-                                turn = 'Player 1'
-                            # If chosen card is a draw 4, other players turn is skipped and they draw 4 cards
-                            elif temp_card.rank == 'Draw4':
-                                for i in range(4):
-                                    player2_hand.add_card(deck.deal())
-                                top_card = player1_hand.remove_card(pos)
-                                # Player 1 gets to choose which color is in play after playing a draw 4
-                                draw4color = input('Enter which color you want to change to: ')
-                                if draw4color != draw4color.upper():
-                                    draw4color = draw4color.upper()
-                                top_card.color = draw4color
-                                print("The color has been changed to " + f"{draw4color}")
-                                time.sleep(1)
-                                turn = 'Player 1'
-                            # If chosen card is a wild card, player 1 can choose which color is in play    
-                            elif temp_card.rank == 'Wild':
-                                top_card = player1_hand.remove_card(pos)
-                                wildcolor = input('Enter which color you want to change to: ')
-                                if wildcolor != wildcolor.upper():
-                                    wildcolor = wildcolor.upper()
-                                top_card.color = wildcolor
-                                print("The color has been changed to " + f"{wildcolor}")
-                                time.sleep(1)
-                                turn = 'Player 2'
-                    else:
-                        print('This card cannot be used')
-                
-                # If player 1 chooses to draw
-                elif player1_choice == 'd':
-                    temp_card = deck.deal()
-                    print('You got: ' + str(temp_card))
-                    time.sleep(1)
-                    # If card is valid player 1 will get a chance to play it
-                    if single_card_check(top_card, temp_card):
-                        player1_hand.add_card(temp_card)
-                    # If not player 1 will have the card added to their deck and their turn ends
-                    else:
-                        print('Cannot use this card')
-                        player1_hand.add_card(temp_card)
-                        turn = 'Player 2'
-                if win_check(player1_hand) == True:
+                top_card, win, skip_turn = player_action(p1_name, player1_hand, player2_hand, top_card, deck)
+                if win:
                     print('\n' + p1_name + ' WON!!')
                     playing = False
                     break
-            
-            # Player 2 Logic
-            if turn == 'Player 2':
-                print(colored("\nIt's " + p2_name + "'s turn\n", attrs=['bold']))
-                time.sleep(1)
-
-                print('The top card is: ' + str(top_card))
-                print('Your cards: ')
-
-                player2_hand.cards_in_hand()
-                player2_choice = input("\nWould you like to Play or Draw? (p/d): ")
-
-                # If player 2 chooses to play a card
-                if player2_choice == 'p':
-                    pos = int(input('Enter number of the card you want to play: '))
-                    temp_card = player2_hand.single_card(pos)
-
-                    # Checking if the chosen card is valid to play
-                    if single_card_check(top_card, temp_card) == True:
-                        # If it's a number type card it'll be played without any extra effects
-                        if temp_card.cardtype == 'number':
-                            top_card = player2_hand.remove_card(pos)
-                            print("\n" + p2_name + f" has played {temp_card}")
-                            time.sleep(1)
-                            turn = 'Player 1'
-                        else:
-                            # If chosen card is a skip or reverse, the other players turn is skipped
-                            if temp_card.rank == 'Skip' or temp_card.rank == 'Reverse':
-                                turn = 'Player 2'
-                                top_card = player2_hand.remove_card(pos)
-                                print("\n" + p2_name + f" has played {temp_card}")
-                                time.sleep(1)
-                            # If chosen card is a draw 2, other players turn is skipped and they draw 2 cards
-                            elif temp_card.rank == 'Draw2':
-                                for i in range(2):
-                                    player1_hand.add_card(deck.deal())
-                                top_card = player2_hand.remove_card(pos)
-                                print("\n" + p2_name + f" has played {temp_card}")
-                                time.sleep(1)
-                                turn = 'Player 2'
-                            # If chosen card is a draw 4, other players turn is skipped and they draw 4 cards
-                            elif temp_card.rank == 'Draw4':
-                                for i in range(4):
-                                    player1_hand.add_card(deck.deal())
-                                top_card = player2_hand.remove_card(pos)
-                                # Player 2 gets to choose which color is in play after playing a draw 4
-                                draw4color = input('Enter which color you want to change to: ')
-                                if draw4color != draw4color.upper():
-                                    draw4color = draw4color.upper()
-                                top_card.color = draw4color
-                                print("The color has been changed to " + f"{draw4color}")
-                                time.sleep(1)
-                                turn = 'Player 2'
-                            # If chosen card is a wild card, player 2 can choose which color is in play  
-                            elif temp_card.rank == 'Wild':
-                                top_card = player2_hand.remove_card(pos)
-                                wildcolor = input('Enter which color you want to change to: ')
-                                if wildcolor != wildcolor.upper():
-                                    wildcolor = wildcolor.upper()
-                                top_card.color = wildcolor
-                                print("The color has been changed to " + f"{wildcolor}")
-                                time.sleep(1)
-                                turn = 'Player 1'
-                    else:
-                        print('This card cannot be used')
-
-                # If player 2 chooses to draw
-                elif player2_choice == 'd':
-                    temp_card = deck.deal()
-                    print('You got: ' + str(temp_card))
-                    time.sleep(1)
-                    # If card is valid player 2 will get a chance to play it
-                    if single_card_check(top_card, temp_card):
-                        player2_hand.add_card(temp_card)
-                    # If not player 2 will have the card added to their deck and their turn ends
-                    else:
-                        print('Cannot use this card')
-                        player2_hand.add_card(temp_card)
-                        turn = 'Player 1'
-                if win_check(player1_hand) == True:
+                if skip_turn:
+                    turn = 'Player 1'  # Skip the next player's turn
+                else:
+                    turn = 'Player 2'
+            elif turn == 'Player 2':
+                top_card, win, skip_turn = player_action(p2_name, player2_hand, player1_hand, top_card, deck)
+                if win:
                     print('\n' + p2_name + ' WON!!')
                     playing = False
                     break
+                if skip_turn:
+                    turn = 'Player 2'  # Skip the next player's turn
+                else:
+                    turn = 'Player 1'
 
-        # If a player wins, asks user if they'd like to play again                
         new_game = input('Would you like to play again? (y/n)')
-        # Restarts loop if yes
-        if new_game == 'y':
-            continue
-        # Prints thank you message and ends game if no
-        else:
+        if new_game != 'y':
             print('\nThanks for playing!')
             break
     
