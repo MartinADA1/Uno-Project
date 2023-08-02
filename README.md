@@ -7,7 +7,7 @@ Dependencies:
 How to run the game:
 1. Clone the repository with this link: 
 2. Have python installed on your system
-3. Open terminal and get to the `/UNO Project` folder
+3. Open terminal and get to the `/UNO-Project` folder
 4. Type in `python uno_game.py` and press enter
 5. The game should now be running!
 
@@ -144,13 +144,14 @@ As well as this I continued to update my comments and carried on refactoring cod
 ### Evaluation
 ## Analysis with embedded examples of key code refactoring, reuse, smells.
 
-When handling action type cards and their effects this included the effects the card "draw 2" had on the opposing player, initially I had it as a repeated line of code making use of the add_card method.
+When I initally created a working version of the game, I had a lot of repeated logic for players which made my code very unreadable and reptitive.
 
-[Image Link] https://ibb.co/cTvzWM0
+[Image Link] https://ibb.co/3s9sp54
 
-After refactoring, I made use of a short for loop to get rid of this repetition in my code:
+After refactoring, I made use of a function that handles all logic for both player and ai choices, so that function could be called multiple times rather than all its code being repeated each time its needed:
 
-[Image Link] https://ibb.co/0Vv57gk
+[Image Link] https://ibb.co/hc4R9FW
+[Image Link] https://ibb.co/h8gFkpv
 
 ## Implementation and effective use of ‘advanced’ programming principles
 In my code you can see that I've used object orientated programming, as well as this a modular approach has been used to help keep my code readable and easy to modify when needed. Error handling has also been added throughout the code to make sure that user inputs aren't able to stop my code from running. Repetitiveness was also avoided in my development to prevent alot of repeated code being pasted in a block of code.
@@ -171,11 +172,13 @@ Below are images to support the usage of these principles:
 
 # DRY (Don't Repeat Yourself)
 
-[Image Link] https://ibb.co/sJH4cdT
+[Image Link] https://ibb.co/pnJWLv3
 
 ## Reflection
-In conclusion, I believe my project, "Uno" was a success - it was playable with two different playstyles being vs Ai and another player, object orientated programming was well used to help the clearness of my code as well as using a modular approach. I feel that this challenge has helped me greatly with my understanding of classes and why they are used - especially how they help the clearness of code and when you go back to update anything. If there was something that I think I would've wanted to add on it would probably be to increase the amount of players or AI that could paly in a session, however due to the time given (and missing a week due to illness) this wasnt possible - I wouldve also liked to refactor the player vs player and player vs ai functions more to eventually make them useable from one function rather than 2.
+In conclusion, I believe my project, "Uno" was a success - it was playable with two different playstyles being vs Ai and another player, object orientated programming was well used to help the clearness of my code as well as using a modular approach. I feel that this challenge has helped me greatly with my understanding of classes and why they are used - especially how they help the clearness of code and when you go back to update anything. 
 
+Initially I was rushed to finish due to illness, resulting in me submitting code that had alot of repeating code for just the logic functions. However, due to the very generous extension given (thank you), I was actually able to refactor this - having player and ai logic in their own functions, so instead of having huge blocks of code of over 100 lines each time theyre required, I was able to just use 1 line to call the function. This further adds to the success that I believe that I achieved.
 
+If there was something that I think I would've wanted to add on it would probably be to increase the amount of players or AI that could play in a session, however, with the addition of my refactored logic functions  I think this wouldn't be too hard to add anymore.
 
 
